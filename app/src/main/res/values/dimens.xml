@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="square_size">100dp</dimen>
+    <dimen name="image_width">800dp</dimen>
+    <dimen name="image_height">600dp</dimen>
+</resources>
