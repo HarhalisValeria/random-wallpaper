@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             requestLayout()
         }
 
+        // There may be a problem now, as it starts
         setNewImage() // Initial image
 
         with(binding.getRandomImageButton) {
@@ -40,15 +42,34 @@ class MainActivity : AppCompatActivity() {
                 openSetWallpaperDialog()
             }
         }
+
+        binding.editCategory.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                return@setOnEditorActionListener setNewImage()
+            }
+
+            return@setOnEditorActionListener false
+        }
     }
 
-    private fun setNewImage() {
+    private fun setNewImage(): Boolean {
+        val keyword = binding.editCategory.text.toString()
+
+        val baseImageUrl = "https://source.unsplash.com/random/800x600"
+        val url = if (keyword.isBlank()) {
+            baseImageUrl
+        } else {
+            "$baseImageUrl?$keyword"
+        }
+
         Glide.with(this)
-            .load("https://source.unsplash.com/random/800x600")
+            .load(url)
             .skipMemoryCache(true)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .placeholder(binding.randomImage.drawable)
             .into(binding.randomImage)
+
+        return false
     }
 
     private fun openSetWallpaperDialog(): Boolean {
@@ -81,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             val wallpaperManager = WallpaperManager.getInstance(context)
 
             // Get the drawable from the ImageView
-            val drawable = binding.randomImage.drawable
+            val drawable =  binding.randomImage.drawable
 
             // Convert the drawable to a Bitmap
             val bitmap = when (drawable) {

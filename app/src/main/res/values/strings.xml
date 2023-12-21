@@ -4,4 +4,5 @@
     <string name="random_number">Random number: %d</string>
     <string name="wallpaper_preview">Wallpaper Preview</string>
     <string name="set_as_wallpaper">Set as Wallpaper</string>
+    <string name="edit_category">Enter category:</string>
 </resources>
